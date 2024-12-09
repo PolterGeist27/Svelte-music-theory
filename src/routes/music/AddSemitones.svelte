@@ -3,7 +3,7 @@
     
     let notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
     let RandomNote: string = '';
-    let interval: number = 0;
+    let interval = 0;
 
     let letterInput: string = '';
 
@@ -37,7 +37,7 @@
 </script>
 
 <div style="margin-bottom: 1rem; text-align: center;">
-    <p style="font-size: 1.25rem; font-weight: bold;">
+    <p style="font-size: 1.25rem; font-weight: bold; color: white;">
         {#if interval >= 0}
             {RandomNote} + {interval} = ??
         {:else}
@@ -48,7 +48,7 @@
 </div>
 
 <div>
-    <label for="letters">Note:</label>
+    <label for="letters" style="color: white;">Note:</label>
     <input
       id="letters"
       type="text"

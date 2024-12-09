@@ -43,20 +43,20 @@
 
 
 <div style="margin-bottom: 1rem; text-align: center;">
-    <p style="font-size: 1.25rem; font-weight: bold;">
+    <p style="font-size: 1.25rem; font-weight: bold; color: white;">
         {RandomNotes[0]} --> {RandomNotes[1]}
     </p>
 </div>
 
 <div>
-    <label for="semitones">Semitones:</label>
+    <label for="semitones" style="color: white;">Semitones:</label>
     <input
       id="semitones"
       type="number"
       bind:value={numberInput}
       placeholder="Enter number of semitones"
     />
-    <button class="submit-button" on:click={checkSemitones}>Submit</button>
+    <button class="submit-button" onclick={checkSemitones}>Submit</button>
 </div>
 
 <style>

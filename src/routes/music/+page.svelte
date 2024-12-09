@@ -13,6 +13,7 @@
         align-items: center;
         justify-content: center;
         height: 100vh;
+        background-color: #1e1e1e;
     }
     .buttons {
         margin-bottom: 20px;
