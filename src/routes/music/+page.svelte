@@ -6,6 +6,19 @@
     const currentExercise = writable('AddSemitones');
 </script>
 
+<div class="centered">
+    <div class="buttons">
+        <button onclick={() => currentExercise.set('NoteDistance')}>Note Distance</button>
+        <button onclick={() => currentExercise.set('AddSemitones')}>Add Semitones</button>
+    </div>
+
+    {#if $currentExercise === 'NoteDistance'}
+        <NoteDistance />
+    {:else if $currentExercise === 'AddSemitones'}
+        <AddSemitones />
+    {/if}
+</div>
+
 <style>
     .centered {
         display: flex;
@@ -37,16 +50,3 @@
         box-shadow: 0 0 0 3px rgba(98, 0, 234, 0.5);
     }
 </style>
-
-<div class="centered">
-    <div class="buttons">
-        <button on:click={() => currentExercise.set('NoteDistance')}>Note Distance</button>
-        <button on:click={() => currentExercise.set('AddSemitones')}>Add Semitones</button>
-    </div>
-
-    {#if $currentExercise === 'NoteDistance'}
-        <NoteDistance />
-    {:else if $currentExercise === 'AddSemitones'}
-        <AddSemitones />
-    {/if}
-</div>
