@@ -1,13 +1,13 @@
 <script lang="ts">
+	import { getScoreContext } from '$lib/context/context';
     import { onMount } from 'svelte';
-    
-    let { score = $bindable(0), ...props } = $props();
 
     let notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
     let RandomNotes: string[] = $state([]);
     
-    //let numberInput: number = 0;
     let inputElement: HTMLInputElement | null = null; // Reference to input element
+
+    let score = getScoreContext();
 
     function generateRandomNotes() {
         const firstIndex = Math.floor(Math.random() * notes.length);
@@ -37,9 +37,11 @@
         const inputValue = Number(inputElement?.value);
         if (inputValue === distanceUp || inputValue === -distanceDown) {
             alert('Correct!');
+            score.score += 1;
         } else {
             alert(`Incorrect. The correct number of semitones between ${RandomNotes[0]} and ${RandomNotes[1]} ` +
                 `is either ${distanceUp} (up) or -${distanceDown} (down).`);
+            score.score = 0;
         }
 
         // Update notes and clear input

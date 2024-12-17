@@ -1,14 +1,14 @@
 <script lang="ts">
+	import { getScoreContext } from '$lib/context/context';
     import { onMount } from 'svelte';
-    
-    let { score = $bindable(0), ...props } = $props();
     
     let notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
     let RandomNote = $state('');
     let interval = $state(0);
 
-    let letterInput = '';
     let inputElement: HTMLInputElement | null = null; // Reference to input element
+
+    let score = getScoreContext(); // get the score object from the context
 
     function generateRandomNote() {
         const firstIndex = Math.floor(Math.random() * notes.length);
@@ -29,11 +29,11 @@
         
         if (notes[correctIndex] === inputElement?.value) {
             alert('Correct!');
-            score += 1;
+            score.score += 1; // increment the object directly to affect state
         } 
         else {
             alert(`Incorrect. The correct note is ${notes[correctIndex]}.`);
-            score = 0;
+            score.score = 0; // change the object directly to affect state
         }
 
         // Update notes and clear input

@@ -1,5 +1,7 @@
 <script lang="ts">
     import type { PageData } from './$types';
+    import { setScoreContext } from '$lib/context/context';
+
     import NoteDistance from "./NoteDistance.svelte";
     import AddSemitones from "./AddSemitones.svelte";
     
@@ -8,12 +10,14 @@
     let currentExercise = $state('AddSemitones');
     let showLeaderboard = $state(false);
 
-    let score = $state(0);
+    let score = $state({ score: 0 });
+    setScoreContext(score);
 </script>
 
 <div class="centered">
+    
+    <!-- Leaderboard -->
     <button onclick={() => showLeaderboard = true}>Leaderboard</button>
-
     {#if showLeaderboard}
         <div class="leaderboard-popup">
             <h2 class="text-2xl font-bold mb-3 border-b-2 border-gray-300 pb-2">Leaderboard</h2>
@@ -30,17 +34,23 @@
         </div>
     {/if}
 
-
-    <div class="buttons">
-        <button onclick={() => currentExercise = 'NoteDistance'}>Note Distance</button>
-        <button onclick={() => currentExercise = 'AddSemitones'}>Add Semitones</button>
+    <!-- Current Score Display -->
+    <div class="score-display">
+        <h2>Current Score: {score.score}</h2>
     </div>
 
+    <!-- Exercises -->
     {#if currentExercise === 'NoteDistance'}
         <NoteDistance />
     {:else if currentExercise === 'AddSemitones'}
         <AddSemitones />
     {/if}
+
+    <!-- Buttons to switch exercises -->
+    <div class="buttons">
+        <button onclick={() => currentExercise = 'NoteDistance'}>Note Distance</button>
+        <button onclick={() => currentExercise = 'AddSemitones'}>Add Semitones</button>
+    </div>
 </div>
 
 <style>
@@ -101,4 +111,16 @@
     .leaderboard-popup li {
         margin: 5px 0;
     }
+
+    .score-display {
+        color: white;
+        font-size: 24px;
+        margin-top: 20px;
+        padding: 10px;
+        background-color: #333;
+        border-radius: 5px;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
 </style>
