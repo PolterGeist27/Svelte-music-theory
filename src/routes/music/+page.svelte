@@ -1,7 +1,7 @@
 <script lang="ts">
     import type { PageData } from './$types';
     import { setScoreContext } from '$lib/context/context';
-
+    import { onMount } from 'svelte';
     import NoteDistance from "./NoteDistance.svelte";
     import AddSemitones from "./AddSemitones.svelte";
     
@@ -13,6 +13,33 @@
 
     let score = $state({ score: 0 });
     setScoreContext(score);
+
+    // New State for Username
+    let username = $state('');
+    let hasUsername = $state(false);
+    
+    onMount(() => {
+        // Check if sessionStorage is available
+        if (typeof window !== 'undefined' && sessionStorage) {
+            let savedUsername = sessionStorage.getItem('username');
+            if (savedUsername) { 
+                username = savedUsername; 
+                hasUsername = true;
+            }
+        }
+    });
+
+    function submitUsername() {
+        if (username.trim()) {
+            hasUsername = true;
+            if (typeof window !== 'undefined' && sessionStorage) {
+                sessionStorage.setItem('username', username);
+            }
+        } 
+        else {
+            alert("Please enter a valid username.");
+        }
+    }
 
     function changeExercise() {
         saveScore();
@@ -33,7 +60,7 @@
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ userId: 1, score: score.score })
+            body: JSON.stringify({ username: username, score: score.score })
         })
         .then(response => response.json())
         .then(async data => {
@@ -62,6 +89,21 @@
     }
 </script>
 
+{#if !hasUsername}
+<!-- Username Input Form -->
+<div class="username-form centered">
+    <h2 style="color: white;">Please enter your username</h2>
+    <input 
+        type="text" 
+        bind:value={username} 
+        placeholder="Enter your username"
+    />
+    <button onclick={submitUsername}>Submit</button>
+</div>
+
+{:else}
+
+<!-- Main Content -->
 <div class="centered">
     
     <!-- Leaderboard -->
@@ -100,6 +142,8 @@
         <button onclick={changeExercise}>Add Semitones</button>
     </div>
 </div>
+
+{/if}
 
 <style>
     .centered {

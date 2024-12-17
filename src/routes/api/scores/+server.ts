@@ -11,20 +11,18 @@ export const GET = async ({ url }) => {
         if (user) {
             // Fetch scores for a specific user
             scores = await db.query(
-                `SELECT U.Username, S.Score
-                 FROM Scores S
-                 JOIN Users U ON S.UserId = U.Id
-                 WHERE U.Username = @param1
-                 ORDER BY S.Score DESC;`,
+                `SELECT Username, Score
+                 FROM Scores
+                 WHERE Username = @param1
+                 ORDER BY Score DESC;`,
                 [user]
             );
         } else {
             // Fetch the top 10 scores
             scores = await db.query(
-                `SELECT TOP 5 U.Username, S.Score
-                 FROM Scores S
-                 JOIN Users U ON S.UserId = U.Id
-                 ORDER BY S.Score DESC;`
+                `SELECT TOP 5 Username, Score
+                 FROM Scores
+                 ORDER BY Score DESC;`
             );
         }
 
@@ -37,16 +35,16 @@ export const GET = async ({ url }) => {
 
 export const POST = async ({ request }) => {
     try {
-        const { userId, score } = await request.json();
+        const { username, score } = await request.json();
 
-        if (!userId || !score) {
-            return json({ success: false, error: 'Missing userId or score' }, { status: 400 });
+        if (!username || !score) {
+            return json({ success: false, error: 'Missing username or score' }, { status: 400 });
         }
 
         await db.query(
-            `INSERT INTO Scores (UserId, Score)
+            `INSERT INTO Scores (Username, Score)
              VALUES (@param1, @param2);`,
-            [userId, score]
+            [username, score]
         );
 
         return json({ success: true, message: 'Score saved successfully' });
