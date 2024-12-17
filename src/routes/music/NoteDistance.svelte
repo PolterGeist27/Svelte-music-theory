@@ -1,8 +1,13 @@
 <script lang="ts">
     import { onMount } from 'svelte';
+    
+    let { score = $bindable(0), ...props } = $props();
+
     let notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
-    let RandomNotes: string[] = [];
-    let numberInput: number = 0;
+    let RandomNotes: string[] = $state([]);
+    
+    //let numberInput: number = 0;
+    let inputElement: HTMLInputElement | null = null; // Reference to input element
 
     function generateRandomNotes() {
         const firstIndex = Math.floor(Math.random() * notes.length);
@@ -29,15 +34,20 @@
         const distanceUp = (secondIndex - firstIndex + notes.length) % notes.length;
         const distanceDown = (firstIndex - secondIndex + notes.length) % notes.length;
 
-        if (numberInput === distanceUp || numberInput === -distanceDown) {
+        const inputValue = Number(inputElement?.value);
+        if (inputValue === distanceUp || inputValue === -distanceDown) {
             alert('Correct!');
         } else {
-            alert(`Incorrect. The correct number of semitones is either ${distanceUp} (up) or -${distanceDown} (down).`);
+            alert(`Incorrect. The correct number of semitones between ${RandomNotes[0]} and ${RandomNotes[1]} ` +
+                `is either ${distanceUp} (up) or -${distanceDown} (down).`);
         }
 
         // Update notes and clear input
         generateRandomNotes();
-        numberInput = 0;
+        if (inputElement) {
+            inputElement.value = '';
+            inputElement.focus();
+        }
     }
 </script>
 
@@ -52,32 +62,37 @@
     <label for="semitones" style="color: white;">Semitones:</label>
     <input
       id="semitones"
-      type="number"
-      bind:value={numberInput}
+      bind:this={inputElement}
       placeholder="Enter number of semitones"
+      oninput={(e) => {
+        const target = e.target;
+        if (target instanceof HTMLInputElement) {
+            // Replace any invalid characters (non-digits and multiple '-' or misplaced '-')
+            target.value = target.value.replace(/[^0-9-]/g, '')       // Allow only digits and '-'
+                                       .replace(/(?!^-)-/g, '');     // Remove '-' if not at the start
+        }
+      }}
     />
     <button class="submit-button" onclick={checkSemitones}>Submit</button>
 </div>
 
 <style>
-    .submit-button {
-        padding-left: 1rem;
-        padding-right: 1rem;
-        padding-top: 0.5rem;
-        padding-bottom: 0.5rem;
-        background-color: #3b82f6;
+    button {
+        background-color: #6200ea;
         color: white;
-        font-weight: 600;
-        border-radius: 0.5rem;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border: none;
+        padding: 10px 20px;
+        margin: 5px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
     }
-
-    .submit-button:hover {
-        background-color: #2563eb;
+    button:hover {
+        background-color: #3700b3;
     }
-
-    .submit-button:focus {
+    button:focus {
         outline: none;
-        outline: 2px solid rgba(96, 165, 250, 0.75);
+        box-shadow: 0 0 0 3px rgba(98, 0, 234, 0.5);
     }
 </style>

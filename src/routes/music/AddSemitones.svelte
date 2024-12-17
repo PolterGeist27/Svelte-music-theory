@@ -29,8 +29,11 @@
         
         if (notes[correctIndex] === inputElement?.value) {
             alert('Correct!');
-        } else {
+            score += 1;
+        } 
+        else {
             alert(`Incorrect. The correct note is ${notes[correctIndex]}.`);
+            score = 0;
         }
 
         // Update notes and clear input
@@ -64,7 +67,7 @@
       oninput={(e) => {
         const target = e.target;
         if (target instanceof HTMLInputElement) {
-            target.value = target.value.replace(/[^a-zA-Z]/g, '')
+            target.value = target.value.replace(/[^a-zA-Z#]/g, '')
         }
       }}
     />
@@ -72,24 +75,22 @@
 </div>
 
 <style>
-    .submit-button {
-        padding-left: 1rem;
-        padding-right: 1rem;
-        padding-top: 0.5rem;
-        padding-bottom: 0.5rem;
-        background-color: #3b82f6;
+    button {
+        background-color: #6200ea;
         color: white;
-        font-weight: 600;
-        border-radius: 0.5rem;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border: none;
+        padding: 10px 20px;
+        margin: 5px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
     }
-
-    .submit-button:hover {
-        background-color: #2563eb;
+    button:hover {
+        background-color: #3700b3;
     }
-
-    .submit-button:focus {
+    button:focus {
         outline: none;
-        outline: 2px solid rgba(96, 165, 250, 0.75);
+        box-shadow: 0 0 0 3px rgba(98, 0, 234, 0.5);
     }
 </style>
