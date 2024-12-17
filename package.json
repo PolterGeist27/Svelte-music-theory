@@ -13,8 +13,8 @@
 	},
 	"devDependencies": {
 		"@eslint/compat": "^1.2.3",
-		"@sveltejs/adapter-auto": "^3.0.0",
-		"@sveltejs/kit": "^2.9.0",
+		"@sveltejs/adapter-auto": "^3.3.1",
+		"@sveltejs/kit": "^2.11.1",
 		"@sveltejs/vite-plugin-svelte": "^5.0.0",
 		"autoprefixer": "^10.4.20",
 		"eslint": "^9.7.0",
@@ -34,6 +34,13 @@
 	"dependencies": {
 		"@tailwindcss/container-queries": "^0.1.1",
 		"@tailwindcss/forms": "^0.5.9",
-		"@tailwindcss/typography": "^0.5.15"
+		"@tailwindcss/typography": "^0.5.15",
+		"@types/mssql": "^9.1.5",
+		"better-sqlite3": "^11.7.0",
+		"cookie": "^1.0.2",
+		"mssql": "^11.0.1"
+	},
+	"overrides": {
+  		"cookie": "^1.0.2"
 	}
 }

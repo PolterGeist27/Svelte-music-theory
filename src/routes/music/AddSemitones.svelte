@@ -1,11 +1,14 @@
 <script lang="ts">
     import { onMount } from 'svelte';
     
+    let { score = $bindable(0), ...props } = $props();
+    
     let notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
-    let RandomNote: string = '';
-    let interval = 0;
+    let RandomNote = $state('');
+    let interval = $state(0);
 
-    let letterInput: string = '';
+    let letterInput = '';
+    let inputElement: HTMLInputElement | null = null; // Reference to input element
 
     function generateRandomNote() {
         const firstIndex = Math.floor(Math.random() * notes.length);
@@ -24,7 +27,7 @@
         const firstIndex = notes.indexOf(RandomNote);
         const correctIndex = (firstIndex + interval + notes.length) % notes.length;
         
-        if (notes[correctIndex] === letterInput) {
+        if (notes[correctIndex] === inputElement?.value) {
             alert('Correct!');
         } else {
             alert(`Incorrect. The correct note is ${notes[correctIndex]}.`);
@@ -32,7 +35,10 @@
 
         // Update notes and clear input
         generateRandomNote();
-        letterInput = '';
+        if (inputElement) {
+            inputElement.value = '';
+            inputElement.focus();
+        }
     }
 </script>
 
@@ -52,17 +58,17 @@
     <input
       id="letters"
       type="text"
-      bind:value={letterInput}
+      bind:this={inputElement}
       placeholder="Enter a note"
       pattern="[a-zA-Z]*"
-      on:input={(e) => {
+      oninput={(e) => {
         const target = e.target;
         if (target instanceof HTMLInputElement) {
             target.value = target.value.replace(/[^a-zA-Z]/g, '')
         }
       }}
     />
-    <button class="submit-button" on:click={checkSemitones}>Submit</button>
+    <button class="submit-button" onclick={checkSemitones}>Submit</button>
 </div>
 
 <style>

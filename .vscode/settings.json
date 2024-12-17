@@ -1,0 +1,14 @@
+{
+    "files.exclude": {
+        "**/.gitignore": true,
+        "**/.npmrc": true,
+        "**/.prettierignore": true,
+        "**/.prettierrc": true,
+        "**/eslint.config.js": true,
+        "**/postcss.config.js": true,
+        "**/tailwind.config.ts": true,
+        "**/tsconfig.json": true,
+        "**/vite.config.ts": true,
+        "**/svelte.config.js": true
+    }
+}
