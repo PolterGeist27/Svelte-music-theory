@@ -7,8 +7,8 @@ const config: SqlConfig = {
     server: 'diogotavares-pc\\SQLEXPRESS',
     database: 'SvelteApp',
     options: {
-        encrypt: true, // Use encryption for Azure SQL Server
-        trustServerCertificate: true, // Needed for self-signed certificates
+        encrypt: false,
+        //trustServerCertificate: true, // Needed for self-signed certificates
     },
 };
 

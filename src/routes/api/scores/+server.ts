@@ -34,3 +34,24 @@ export const GET = async ({ url }) => {
         return json({ success: false, error: 'Unable to fetch scores' }, { status: 500 });
     }
 };
+
+export const POST = async ({ request }) => {
+    try {
+        const { userId, score } = await request.json();
+
+        if (!userId || !score) {
+            return json({ success: false, error: 'Missing userId or score' }, { status: 400 });
+        }
+
+        await db.query(
+            `INSERT INTO Scores (UserId, Score)
+             VALUES (@param1, @param2);`,
+            [userId, score]
+        );
+
+        return json({ success: true, message: 'Score saved successfully' });
+    } catch (error) {
+        console.error('Error saving score:', error);
+        return json({ success: false, error: 'Unable to save score' }, { status: 500 });
+    }
+};

@@ -12,6 +12,40 @@
 
     let score = $state({ score: 0 });
     setScoreContext(score);
+
+    function changeExercise() {
+        saveScore();
+        if (currentExercise === 'NoteDistance')
+            currentExercise = 'AddSemitones';
+        else
+            currentExercise = 'NoteDistance'
+        score.score = 0;
+    }
+
+    function saveScore() {
+        if (score.score === 0) return;
+
+        console.log("Saving score...");
+
+
+
+        fetch('/api/scores/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ userId: 1, score: score.score })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Score saved:', data);
+        })
+        .catch(error => {
+            console.error('Error saving score:', error);
+        });
+    }
+
+
 </script>
 
 <div class="centered">
@@ -41,15 +75,15 @@
 
     <!-- Exercises -->
     {#if currentExercise === 'NoteDistance'}
-        <NoteDistance />
+        <NoteDistance {saveScore} />
     {:else if currentExercise === 'AddSemitones'}
-        <AddSemitones />
+        <AddSemitones {saveScore} />
     {/if}
 
     <!-- Buttons to switch exercises -->
     <div class="buttons">
-        <button onclick={() => currentExercise = 'NoteDistance'}>Note Distance</button>
-        <button onclick={() => currentExercise = 'AddSemitones'}>Add Semitones</button>
+        <button onclick={changeExercise}>Note Distance</button>
+        <button onclick={changeExercise}>Add Semitones</button>
     </div>
 </div>
 
@@ -122,5 +156,4 @@
         text-align: center;
         margin-bottom: 10px;
     }
-
 </style>

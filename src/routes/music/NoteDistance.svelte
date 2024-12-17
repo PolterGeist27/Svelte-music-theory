@@ -2,6 +2,8 @@
 	import { getScoreContext } from '$lib/context/context';
     import { onMount } from 'svelte';
 
+    let { saveScore } = $props();
+
     let notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
     let RandomNotes: string[] = $state([]);
     
@@ -41,6 +43,8 @@
         } else {
             alert(`Incorrect. The correct number of semitones between ${RandomNotes[0]} and ${RandomNotes[1]} ` +
                 `is either ${distanceUp} (up) or -${distanceDown} (down).`);
+            
+            saveScore();
             score.score = 0;
         }
 

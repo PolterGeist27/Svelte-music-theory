@@ -2,6 +2,8 @@
 	import { getScoreContext } from '$lib/context/context';
     import { onMount } from 'svelte';
     
+    let { saveScore } = $props();
+
     let notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
     let RandomNote = $state('');
     let interval = $state(0);
@@ -33,6 +35,7 @@
         } 
         else {
             alert(`Incorrect. The correct note is ${notes[correctIndex]}.`);
+            saveScore();
             score.score = 0; // change the object directly to affect state
         }
 
