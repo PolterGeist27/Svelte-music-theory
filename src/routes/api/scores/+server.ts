@@ -21,7 +21,7 @@ export const GET = async ({ url }) => {
         } else {
             // Fetch the top 10 scores
             scores = await db.query(
-                `SELECT TOP 10 U.Username, S.Score
+                `SELECT TOP 5 U.Username, S.Score
                  FROM Scores S
                  JOIN Users U ON S.UserId = U.Id
                  ORDER BY S.Score DESC;`

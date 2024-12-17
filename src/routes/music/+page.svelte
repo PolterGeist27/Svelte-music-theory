@@ -6,6 +6,7 @@
     import AddSemitones from "./AddSemitones.svelte";
     
     let { data }: { data: PageData } = $props();
+    let scores = $state(data.scores);
     
     let currentExercise = $state('AddSemitones');
     let showLeaderboard = $state(false);
@@ -27,9 +28,7 @@
 
         console.log("Saving score...");
 
-
-
-        fetch('/api/scores/', {
+        fetch('/api/scores', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -37,27 +36,42 @@
             body: JSON.stringify({ userId: 1, score: score.score })
         })
         .then(response => response.json())
-        .then(data => {
+        .then(async data => {
             console.log('Score saved:', data);
+            await refreshScores();
         })
         .catch(error => {
             console.error('Error saving score:', error);
         });
     }
 
+    async function refreshScores() {
+        try {
+            const response = await fetch('/api/scores');
+            const result = await response.json();
 
+            if (result.success) {
+                scores = result.data; // Update the scores
+            } else {
+                throw new Error('Failed to refresh leaderboard');
+            }
+        } catch (err) {
+            console.error('Error refreshing scores:', err);
+            data.error = 'Unable to update leaderboard';
+        }
+    }
 </script>
 
 <div class="centered">
     
     <!-- Leaderboard -->
-    <button onclick={() => showLeaderboard = true}>Leaderboard</button>
+    <button onclick={() => { showLeaderboard = true; refreshScores(); }}>Leaderboard</button>
     {#if showLeaderboard}
         <div class="leaderboard-popup">
             <h2 class="text-2xl font-bold mb-3 border-b-2 border-gray-300 pb-2">Leaderboard</h2>
-            {#if data.scores.length > 0}
+            {#if scores?.length > 0}
                 <ul>
-                    {#each data.scores as { Username, Score }}
+                    {#each scores as { Username, Score }}
                         <li>{Username}: {Score} points</li>
                     {/each}
                 </ul>
